@@ -5,49 +5,51 @@
 #                                                     +:+ +:+         +:+      #
 #    By: mmoumini <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2015/04/09 19:35:55 by mmoumini          #+#    #+#              #
-#    Updated: 2015/06/07 21:37:34 by mmoumini         ###   ########.fr        #
+#    Created: 2015/05/12 13:41:19 by mmoumini          #+#    #+#              #
+#    Updated: 2015/06/07 21:33:11 by mmoumini         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 .PHONY = all, clean, fclean, re
 
-NAME = snake
+NAME = music.so
 
 CC = g++
 
 CFLAGS = -Wall -Wextra -Werror
 
-C_LIB = (cd lib/SDL; make; cd ../ncurses; make; cd ../SFML; make; cd ../SFMLSOUND; make)
+C_LIB = (cd ../SFML/lib; make)
 
-CLEAN_LIB = (cd lib/SDL; make clean; cd ../ncurses; make clean; cd ../SFML; make clean; cd ../SFMLSOUND; make clean)
+CLEAN_LIB = (cd ../SFML/lib; make clean)
 
-FCLEAN_LIB = (cd lib/SDL; make fclean; cd ../ncurses; make fclean; cd ../SFML;make fclean; cd ../SFMLSOUND; make fclean)
+FCLEAN_LIB = (cd ../SFML/lib; make fclean)
 
-SRC	=	main.cpp		\
-		Game.class.cpp	\
-		Snake.class.cpp	\
-		element.cpp
+LIB_PATH = -L../SFML/lib -ljpeg -lfreetype -logg -lvorbis -lvorbisenc -lvorbisfile -lFLAC-static -lsfml-audio-s -lsfml-graphics-s -lsfml-window-s -lsfml-system-s -framework OpenGL -framework AppKit -framework IOKit -framework CoreServices -framework Carbon -framework OpenAL
+
+INC = -I./include
+
+SRC	=	sfml_gesture.cpp		\
+		Timer.cpp				\
+		Sfml.class.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)
 
-
 $(NAME): $(OBJ)
 		$(C_LIB)
-		$(CC) -o $(NAME) $(OBJ) $(CFLAGS)
+		$(CC) -shared -fPIC -o $(NAME) $(OBJ) $(LIB_PATH) $(CFLAGS) $(INC)
 
 .%.o: %.cpp
-		$(CC) -o $@ -c $< $(INC) $(CFLAGS)
+	$(CC) -o $@ -c $< $(INC) $(CFLAGS)
 
 clean:
 		rm -rf $(OBJ)
-		 $(CLEAN_LIB)
+		$(CLEAN_LIB)
 
 fclean: clean
+		$(FCLEAN_LIB)
 		rm -rf $(NAME)
-		 $(FCLEAN_LIB)
 
 re: fclean all
 

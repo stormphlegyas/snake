@@ -6,7 +6,7 @@
 #    By: mmoumini <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/05/12 13:41:19 by mmoumini          #+#    #+#              #
-#    Updated: 2015/05/22 19:17:26 by mmoumini         ###   ########.fr        #
+#    Updated: 2015/06/11 13:34:36 by mmoumini         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -18,7 +18,7 @@ CC = g++
 
 CFLAGS = -Wall -Wextra -Werror
 
-C_LIB = (cd lib; make)
+C_LIB = (git clone https://phlegyas@bitbucket.org/phlegyas/lib-sfml.git lib; cd lib; make)
 
 CLEAN_LIB = (cd lib; make clean)
 
