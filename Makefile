@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mmoumini <mmoumini@student.42.fr>          +#+  +:+       +#+         #
+#    By: mmoumini <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/04/09 19:35:55 by mmoumini          #+#    #+#              #
-#    Updated: 2016/06/23 00:39:02 by mmoumini         ###   ########.fr        #
+#    Updated: 2015/05/19 18:56:27 by mmoumini         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -18,11 +18,11 @@ CC = g++
 
 CFLAGS = -Wall -Wextra -Werror
 
-C_LIB = (cd lib/SDL; make; cd ../ncurses; make; cd ../SFML; make; cd ../SFMLSOUND; make)
+C_LIB = (cd lib/SDL; make; cd ../ncurses; make; cd ../SFML; make)
 
-CLEAN_LIB = (cd lib/SDL; make clean; cd ../ncurses; make clean; cd ../SFML; make clean; cd ../SFMLSOUND; make clean)
+CLEAN_LIB = (cd lib/SDL; make clean; cd ../ncurses; make clean; cd ../SFML; make clean)
 
-FCLEAN_LIB = (cd lib/SDL; make fclean; cd ../ncurses; make fclean; cd ../SFML;make fclean; cd ../SFMLSOUND; make fclean)
+FCLEAN_LIB = (cd lib/SDL; make fclean; cd ../ncurses; make fclean; cd ../SFML;make fclean)
 
 SRC	=	main.cpp		\
 		Game.class.cpp	\

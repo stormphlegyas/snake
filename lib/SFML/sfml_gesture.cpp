@@ -6,7 +6,7 @@
 //   By: mmoumini <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2015/05/08 09:59:12 by mmoumini          #+#    #+#             //
-//   Updated: 2015/06/07 21:38:54 by mmoumini         ###   ########.fr       //
+//   Updated: 2015/06/07 20:03:57 by mmoumini         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -49,4 +49,6 @@ extern "C" void				draw( GameEvent & event)
 extern "C" void				closeWin( void )
 {
 	sfmlclass->app->close();
+	sfmlclass->music->stop();
+//	delete sfmlclass;
 }

@@ -3,10 +3,10 @@
 //                                                        :::      ::::::::   //
 //   main.cpp                                           :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
-//   By: mmoumini <mmoumini@student.42.fr>          +#+  +:+       +#+        //
+//   By: mmoumini <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2015/05/04 10:54:59 by mmoumini          #+#    #+#             //
-//   Updated: 2016/06/23 00:40:33 by mmoumini         ###   ########.fr       //
+//   Updated: 2015/06/07 21:01:24 by mmoumini         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -45,7 +45,6 @@ void					delete_binar( void )
 	remove("sdl.so");
 	remove("ncurses.so");
 	remove("sfml.so");
-	remove("music.so");
 }
 
 void					cpy_sdl_binar( void )
@@ -70,15 +69,6 @@ void					cpy_sfml_binar( void )
 {
 	std::ifstream	src("lib/SFML/sfml.so", std::ios::binary);
 	std::ofstream	dst("sfml.so", std::ios::binary);
-	dst << src.rdbuf();
-	src.close();
-	dst.close();
-}
-
-void					cpy_sound_binar( void )
-{
-	std::ifstream	src("lib/SFMLSOUND/music.so", std::ios::binary);
-	std::ofstream	dst("music.so", std::ios::binary);
 	dst << src.rdbuf();
 	src.close();
 	dst.close();
@@ -142,21 +132,6 @@ void					dime_mult(GameEvent &event, char *arg)
 			std::cout << "choose size between 1 and 3" << std::endl;
 	}
 }
-void					start_music( void (*f)() )
-{
-	void				*dl_handle;
-	void				(*init_ptr)( void );
-
-	cpy_sound_binar();
-	if ((dl_handle = dlopen("music.so", RTLD_LAZY | RTLD_LOCAL)) == NULL)
-	{
-		std::cout << "can't load music.so" << std::endl;
-		f = NULL;
-	}
-	init_ptr = (void(*)( void )) dlsym(dl_handle, "init");
-	f = (void(*)( void )) dlsym(dl_handle, "stop");
-	return ;
-}
 
 int						main( int argc, char **argv )
 {
@@ -165,7 +140,6 @@ int						main( int argc, char **argv )
 	void				(*check_event_ptr)( GameEvent& );
 	void				(*draw_ptr)( GameEvent& );
 	void				(*close_ptr)( void );
-	void				(*stop_music)( void );
 	Game				*game = new Game;
 	GameEvent			event;
 
@@ -191,18 +165,23 @@ int						main( int argc, char **argv )
 		delete_binar();
 		return (0);
 	}
+
 	init_ptr = (void(*)( GameEvent& )) dlsym(dl_handle, "init");
 	check_event_ptr = (void(*)(GameEvent&)) dlsym(dl_handle, "check_event");
 	draw_ptr = (void(*)(GameEvent&)) dlsym(dl_handle, "draw");
 	close_ptr = (void(*)(void)) dlsym(dl_handle, "closeWin");
 	if (argc == 3)
 		dime_mult(event, argv[2]);
+
 	init_ptr(event);
+	std::cout << event.surface_height << std::endl;
+
 	event.continuer = true;
 	event.changedir = false;
 	event.wall = false;
 	event.elemvalue = 0;
-	start_music(stop_music);
+	std::cout << event.surface_height << std::endl;
+
 	while (event.continuer)
 	{
 		check_event_ptr(event);

@@ -3,10 +3,10 @@
 //                                                        :::      ::::::::   //
 //   Game.class.cpp                                     :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
-//   By: mmoumini <mmoumini@student.42.fr>          +#+  +:+       +#+        //
+//   By: mmoumini <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2015/04/11 15:33:11 by mmoumini          #+#    #+#             //
-//   Updated: 2016/06/23 00:39:14 by mmoumini         ###   ########.fr       //
+//   Updated: 2015/06/07 19:42:32 by mmoumini         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -16,7 +16,6 @@
 #include "includes/nibbler.hpp"
 #define HEIGHT_SURFACE 12
 #define LENGTH_SURFACE 16
-
 Game::Game( void ) {
 	this->player1 = new Snake(LENGTH_SURFACE / 2, HEIGHT_SURFACE / 2);
 	this->player2 = NULL;
