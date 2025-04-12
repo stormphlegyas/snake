@@ -1,14 +1,14 @@
-// ************************************************************************** //
-//                                                                            //
-//                                                        :::      ::::::::   //
-//   sdl.class.cpp                                      :+:      :+:    :+:   //
-//                                                    +:+ +:+         +:+     //
-//   By: mmoumini <marvin@42.fr>                    +#+  +:+       +#+        //
-//                                                +#+#+#+#+#+   +#+           //
-//   Created: 2015/04/09 18:51:20 by mmoumini          #+#    #+#             //
-//   Updated: 2015/06/07 20:10:43 by mmoumini         ###   ########.fr       //
-//                                                                            //
-// ************************************************************************** //
+/******************************************************************************/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sdl.class.cpp                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmoumini <mmoumini@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2015/04/09 18:51:20 by mmoumini          #+#    #+#             */
+/*   Updated: 2025/04/12 09:49:42 by mmoumini         ###   ########.fr       */
+/*                                                                            */
+/******************************************************************************/
 
 #include "sdl.class.hpp"
 
@@ -34,11 +34,11 @@ Sdl_class::~Sdl_class( void ){
 }
 
 int				Sdl_class::init( GameEvent & event ){
-	Uint32 rmask, gmask, bmask, amask;
+//	Uint32 rmask, gmask, bmask, amask;
 
-	std::list<SDL_RWops*>::iterator		itrw;
+	std::list<SDL_IOStream*>::iterator		itrw;
 
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	if (!SDL_Init(SDL_INIT_VIDEO))
 	{
 		std::cerr << "Erreur d'initialisation de la SDL : \n";
 			std::cerr << "Erreur d'initialisation de la SDL : "; 
@@ -46,7 +46,7 @@ int				Sdl_class::init( GameEvent & event ){
 		SDL_Quit();
 		return (0);
 	}
-
+/*
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
     rmask = 0xff000000;
     gmask = 0x00ff0000;
@@ -57,35 +57,49 @@ int				Sdl_class::init( GameEvent & event ){
     gmask = 0x0000ff00;
     bmask = 0x00ff0000;
     amask = 0xff000000;
-#endif
-
-    this->screen = SDL_CreateWindow("Snake", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SDL_CASE * event.surface_length, SDL_CASE * event.surface_height, SDL_WINDOW_SHOWN );
-	this->back = SDL_CreateRGBSurface(0, SDL_CASE * event.surface_length, SDL_CASE * event.surface_height, 32, rmask, gmask, bmask, amask);
-	this->pRenderer = SDL_CreateRenderer(this->screen, -1, SDL_RENDERER_ACCELERATED);
+#endif*/
+	this->back = SDL_CreateSurface(SDL_CASE * event.surface_length,
+                               SDL_CASE * event.surface_height,
+                               SDL_PIXELFORMAT_ARGB8888);
+	this->screen = SDL_CreateWindow("Snake", SDL_CASE * event.surface_length,
+                                SDL_CASE * event.surface_height,
+                                SDL_WINDOW_OPENGL); 
+	this->back = SDL_CreateSurface(SDL_CASE * event.surface_length,
+		SDL_CASE * event.surface_height,
+		SDL_PIXELFORMAT_ARGB8888);
+	this->pRenderer = SDL_CreateRenderer(this->screen, NULL);
 	this->backTex = SDL_CreateTextureFromSurface(this->pRenderer, this->back);
-	this->file.push_back(SDL_RWFromFile("./src/sprite/head_right.bmp", "rb"));
-	this->file.push_back(SDL_RWFromFile("./src/sprite/head_up.bmp", "rb"));
-	this->file.push_back(SDL_RWFromFile("./src/sprite/head_down.bmp", "rb")); 
-	this->file.push_back(SDL_RWFromFile("./src/sprite/head_left.bmp", "rb"));
+	this->file.push_back(SDL_IOFromFile("./src/sprite/head_right.bmp", "rb"));
+	this->file.push_back(SDL_IOFromFile("./src/sprite/head_up.bmp", "rb"));
+	this->file.push_back(SDL_IOFromFile("./src/sprite/head_down.bmp", "rb")); 
+	this->file.push_back(SDL_IOFromFile("./src/sprite/head_left.bmp", "rb"));
 
-	this->file.push_back(SDL_RWFromFile("./src/sprite/tails_right.bmp", "rb"));	
-	this->file.push_back(SDL_RWFromFile("./src/sprite/tails_up.bmp", "rb"));	
-	this->file.push_back(SDL_RWFromFile("./src/sprite/tails_down.bmp", "rb"));  
-	this->file.push_back(SDL_RWFromFile("./src/sprite/tails_left.bmp", "rb"));
+	this->file.push_back(SDL_IOFromFile("./src/sprite/tails_right.bmp", "rb"));	
+	this->file.push_back(SDL_IOFromFile("./src/sprite/tails_up.bmp", "rb"));	
+	this->file.push_back(SDL_IOFromFile("./src/sprite/tails_down.bmp", "rb"));  
+	this->file.push_back(SDL_IOFromFile("./src/sprite/tails_left.bmp", "rb"));
 
-	this->file.push_back(SDL_RWFromFile("./src/fox.bmp", "rb"));
+	this->file.push_back(SDL_IOFromFile("./src/fox.bmp", "rb"));
 
-	this->file.push_back(SDL_RWFromFile("./src/sprite/body_vert.bmp", "rb"));
-	this->file.push_back(SDL_RWFromFile("./src/sprite/body_hori.bmp", "rb"));
+	this->file.push_back(SDL_IOFromFile("./src/sprite/body_vert.bmp", "rb"));
+	this->file.push_back(SDL_IOFromFile("./src/sprite/body_hori.bmp", "rb"));
 
-	this->file.push_back(SDL_RWFromFile("./src/sprite/right_down.bmp", "rb"));  
-	this->file.push_back(SDL_RWFromFile("./src/sprite/right_up.bmp", "rb"));	
-	this->file.push_back(SDL_RWFromFile("./src/sprite/left_up.bmp", "rb"));	
-	this->file.push_back(SDL_RWFromFile("./src/sprite/left_down.bmp", "rb"));
+	this->file.push_back(SDL_IOFromFile("./src/sprite/right_down.bmp", "rb"));  
+	this->file.push_back(SDL_IOFromFile("./src/sprite/right_up.bmp", "rb"));	
+	this->file.push_back(SDL_IOFromFile("./src/sprite/left_up.bmp", "rb"));	
+	this->file.push_back(SDL_IOFromFile("./src/sprite/left_down.bmp", "rb"));
 	for (itrw = this->file.begin() ; itrw != this->file.end(); itrw++)
 	{
-		this->snk = SDL_LoadBMP_RW(*itrw, 1);
-		SDL_SetColorKey(this->snk, SDL_TRUE, SDL_MapRGB(this->snk->format, 0, 0, 255));
+		this->snk = SDL_LoadBMP_IO(*itrw, true);
+		SDL_SetSurfaceColorKey(
+			this->snk,
+			true,
+			SDL_MapRGB(
+				SDL_GetPixelFormatDetails(this->snk->format),
+				nullptr,
+				0, 0, 255
+			)
+		);
 		this->snk_body.push_back(this->snk);
 		this->pTexture.push_back(SDL_CreateTextureFromSurface(pRenderer, this->snk));
 	}
@@ -123,9 +137,16 @@ void					Sdl_class::draw_head( GameEvent & event ){
 		std::advance( itsrf, 3 );
 		break;
 	default:
-		itsrf = itsrf;
+		// Do nothing
+		break;
 	}
-	SDL_RenderCopy(pRenderer, *itsrf, NULL, &this->newposition);
+	SDL_FRect dst = {
+		static_cast<float>(this->newposition.x),
+		static_cast<float>(this->newposition.y),
+		static_cast<float>(this->newposition.w),
+		static_cast<float>(this->newposition.h)
+	};
+	SDL_RenderTexture(pRenderer, *itsrf, NULL, &dst);
 }
 
 void					Sdl_class::draw_turn_body( dir curent, dir prev ){
@@ -139,19 +160,22 @@ void					Sdl_class::draw_turn_body( dir curent, dir prev ){
 		switch (prev)
 		{
 		case south:
-			if (curent == west)
-				itsrf = itsrf;
-			else if (curent == east)
+			if (curent == west) {
+                // No change to itsrf
+            } else if (curent == east) {
 				std::advance( itsrf, 3 );
+            }
 			break;
 		case north:
-			if (curent == west)
+			if (curent == west) {
 				itsrf++;
-		else if (curent == east)
-			std::advance( itsrf, 2 );	
+            } else if (curent == east) {
+			    std::advance( itsrf, 2 );
+            }
 			break;
 		default:
-			itsrf = itsrf;
+			// Do nothing
+			break;
 		}
 	}
 	else if (curent == north || curent == south)
@@ -159,28 +183,36 @@ void					Sdl_class::draw_turn_body( dir curent, dir prev ){
 		switch (prev)
 		{
 		case east:
-			if (curent == north)
-				itsrf = itsrf;
-			else if (curent == south)
+			if (curent == north) {
+				// No change to itsrf
+            } else if (curent == south) {
 				itsrf++;
+            }
 			break;
 		case west:
-			if (curent == north)
+			if (curent == north) {
 				std::advance( itsrf, 3 );
-			else if (curent == south)
+            } else if (curent == south) {
 				std::advance( itsrf, 2 );
+            }
 			break;
 		default:
-			itsrf = itsrf;
+			// Do nothing
+			break;
 		}
 	}
-	SDL_RenderCopy(pRenderer, *itsrf, NULL, &this->newposition);
+	SDL_FRect dst = {
+		static_cast<float>(this->newposition.x),
+		static_cast<float>(this->newposition.y),
+		static_cast<float>(this->newposition.w),
+		static_cast<float>(this->newposition.h)
+	};
+	SDL_RenderTexture(pRenderer, *itsrf, NULL, &dst);
 }
 
 void					Sdl_class::draw_tail( dir prev ){
 	
 	std::list<SDL_Texture*>::iterator	itsrf;
-	SDL_Texture							*pTexture;
 
 	itsrf = itbdy;
 	switch (prev)
@@ -195,9 +227,16 @@ void					Sdl_class::draw_tail( dir prev ){
 			std::advance( itsrf, 3 );
 			break;
 		default:
-			itsrf = itsrf;
+			// Do nothing
+			break;
 	}
-	SDL_RenderCopy(pRenderer, *itsrf, NULL, &this->newposition);
+	SDL_FRect dst = {
+		static_cast<float>(this->newposition.x),
+		static_cast<float>(this->newposition.y),
+		static_cast<float>(this->newposition.w),
+		static_cast<float>(this->newposition.h)
+	};
+	SDL_RenderTexture(pRenderer, *itsrf, NULL, &dst);
 }
 
 void					Sdl_class::draw_body( GameEvent & event ){
@@ -211,7 +250,7 @@ void					Sdl_class::draw_body( GameEvent & event ){
 	it = event.snakePos.pos.begin();
 	prev = (*it).direction;
 	it++;
-	for (it = it; it != event.snakePos.pos.end(); ++it)
+	for (; it != event.snakePos.pos.end(); ++it)
 	{
 		itsrf = itbdy;
 		itsrf2 = itbdy2;
@@ -231,7 +270,7 @@ void					Sdl_class::draw_body( GameEvent & event ){
 			itsrf2++;
 			break;
 		default:
-			itsrf = itsrf;
+			// Do nothing for itsrf
 			itsrf2++;
 		}
 		it++;
@@ -239,8 +278,15 @@ void					Sdl_class::draw_body( GameEvent & event ){
 			this->draw_tail(prev);
 		else if (curent != prev)
 			this->draw_turn_body(curent, prev);
-		else
-			SDL_RenderCopy(pRenderer, *itsrf2, NULL, &this->newposition);
+		else {
+			SDL_FRect dst = {
+				static_cast<float>(this->newposition.x),
+				static_cast<float>(this->newposition.y),
+				static_cast<float>(this->newposition.w),
+				static_cast<float>(this->newposition.h)
+			};
+			SDL_RenderTexture(pRenderer, *itsrf2, NULL, &dst);
+		}
 		it--;
 		prev = curent;
 	}
@@ -250,13 +296,19 @@ void					Sdl_class::draw_env( GameEvent & event){
 
 	SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
 	SDL_RenderClear(pRenderer);
-	SDL_RenderCopy(pRenderer, this->backTex, NULL, NULL);
+	SDL_RenderTexture(pRenderer, this->backTex, NULL, NULL);
 
 	this->draw_head( event);
 	this->draw_body( event );
 	this->newposition.x = event.elem.x * SDL_CASE;
 	this->newposition.y = event.elem.y * SDL_CASE;
-	SDL_RenderCopy(pRenderer, *ititem, NULL, &newposition);
+	SDL_FRect dst = {
+		static_cast<float>(this->newposition.x),
+		static_cast<float>(this->newposition.y),
+		static_cast<float>(this->newposition.w),
+		static_cast<float>(this->newposition.h)
+	};
+	SDL_RenderTexture(pRenderer, *ititem, NULL, &dst);
 	SDL_RenderPresent(pRenderer);
 }
 
@@ -270,12 +322,13 @@ bool					Sdl_class::check_event( GameEvent & event ){
 	SDL_PollEvent(&sdleven);
 	switch(sdleven.type)
 	{
-	case SDL_QUIT:
+	case SDL_EVENT_QUIT:
 		continuer = 0;
 		event.changedir = false;
 		break;
-	case SDL_KEYDOWN:
-		switch(sdleven.key.keysym.sym)
+	case SDL_EVENT_KEY_DOWN: {
+		SDL_KeyboardEvent *key = (SDL_KeyboardEvent *)&sdleven;
+		switch (key->key)
 		{
 		case SDLK_UP:
 			event.direct = north;
@@ -293,23 +346,24 @@ bool					Sdl_class::check_event( GameEvent & event ){
 			continuer = false;
 			event.changedir = false;
 			break;
-		case SDLK_w:
-			if (event.wall == true)
-				event.wall = false;
-			else
-				event.wall = true;
-		case SDLK_1 :
+		case SDLK_W:
+			event.wall = !event.wall;
+			break;
+		case SDLK_1:
 			event.changelib = true;
 			event.lib = 1;
-		case SDLK_3 :
+			break;
+		case SDLK_3:
 			event.changelib = true;
 			event.lib = 3;
+			break;
 		default:
 			event.changedir = false;
 		}
 		break;
 	}
-	return continuer;
+}
+return continuer;
 }
 
 Sdl_class		& Sdl_class::operator=( Sdl_class const &rhs ) {

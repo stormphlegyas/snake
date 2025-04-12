@@ -88,6 +88,7 @@ Snake::~Snake( void ){
 }
 
 Snake		& Snake::operator=( Snake const &rhs ) {
+		(void)rhs; // Suppress unused parameter warning
 		return *this;
 }
 
@@ -108,10 +109,8 @@ void		Snake::eatApple( void ){
 void		Snake::move( GameEvent & event ){
 
 	std::list<element>::iterator it = snake.end();
-	int		c;
 	element newHead;
 
-	c = 0;
 	it--;
 	_lastBodyPart = *it;
 
@@ -153,11 +152,9 @@ void		Snake::move( GameEvent & event ){
 bool		Snake::move_WallOption( GameEvent & event ){
 
 	std::list<element>::iterator it = snake.end();
-	int		c;
 	element newHead;
 	bool	continuer;
 
-	c = 0;
 	it--;
 	_lastBodyPart = *it;
 

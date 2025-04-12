@@ -1,14 +1,14 @@
-// ************************************************************************** //
-//                                                                            //
-//                                                        :::      ::::::::   //
-//   Ncurses.class.cpp                                  :+:      :+:    :+:   //
-//                                                    +:+ +:+         +:+     //
-//   By: mmoumini <marvin@42.fr>                    +#+  +:+       +#+        //
-//                                                +#+#+#+#+#+   +#+           //
-//   Created: 2015/05/07 15:05:06 by mmoumini          #+#    #+#             //
-//   Updated: 2015/06/07 19:46:59 by mmoumini         ###   ########.fr       //
-//                                                                            //
-// ************************************************************************** //
+/******************************************************************************/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Ncurses.class.cpp                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmoumini <mmoumini@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2015/05/07 15:05:06 by mmoumini          #+#    #+#             */
+/*   Updated: 2025/04/12 16:09:16 by mmoumini         ###   ########.fr       */
+/*                                                                            */
+/******************************************************************************/
 
 #include "Ncurses.class.hpp"
 
@@ -26,6 +26,7 @@ Ncurses_class::~Ncurses_class( void ){
 }
 
 int				Ncurses_class::init( GameEvent & event ){
+	(void)event; // Suppress unused parameter warning
 
 	initscr();
 	noecho();
@@ -71,9 +72,11 @@ bool			Ncurses_class::check_event( GameEvent & event ){
 			event.wall = false;
 		else
 			event.wall = true;
+		break;
 	case 50:
 		event.changelib = true;
 		event.lib = 2;
+		break;
 	case 49:
 		event.changelib = true;
 		event.lib = 1;
@@ -96,7 +99,7 @@ void				Ncurses_class::draw_body( GameEvent & event ){
 
 	it = event.snakePos.pos.begin();
 	it++;
-	for (it = it; it != event.snakePos.pos.end(); ++it)
+	for (; it != event.snakePos.pos.end(); ++it)
 		mvaddch((*it).y, (*it).x, 'X');
 }
 
@@ -108,6 +111,7 @@ void				Ncurses_class::draw_env( GameEvent & event ){
 	refresh();
 }
 
-Ncurses_class		&	Ncurses_class::operator=( Ncurses_class const &rhs ) {
+Ncurses_class & Ncurses_class::operator=( Ncurses_class const &rhs ) {
+	(void)rhs; // Suppress unused parameter warning
 	return *this;
 }

@@ -3,54 +3,62 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mmoumini <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: mmoumini <mmoumini@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/05/12 13:41:19 by mmoumini          #+#    #+#              #
-#    Updated: 2015/05/22 19:17:26 by mmoumini         ###   ########.fr        #
+#    Updated: 2025/04/12 19:11:18 by mmoumini         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
-.PHONY = all, clean, fclean, re
-
-NAME = sfml.so
+ifeq ($(OS),Windows_NT)
+    RM = rm -f
+    RMDIR = rm -rf
+    NAME = sfml.dll
+    SHARED_FLAG = -shared
+    INC = -I./includes/windows
+    LIB_PATH = -L./lib/windows \
+        -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio \
+        -lopengl32 -lwinmm -lgdi32
+else
+    RM = rm -f
+    RMDIR = rm -rf
+    NAME = sfml.so
+    SHARED_FLAG = -shared -fPIC
+    INC = -I./includes/macos
+    LIB_PATH = -L./lib/macos \
+        -lFLAC -lsfml-graphics -lvorbis -lfreetype -lsfml-network -lvorbisenc \
+        -logg -lsfml-system -lvorbisfile -lsfml-audio -lsfml-window \
+        -framework OpenGL -framework AppKit -framework IOKit \
+        -framework CoreServices -framework Carbon -framework OpenAL
+endif
 
 CC = g++
+CFLAGS = -Wall -Wextra -Werror -std=c++17
 
-CFLAGS = -Wall -Wextra -Werror
-
-C_LIB = (cd lib; make)
-
-CLEAN_LIB = (cd lib; make clean)
-
-FCLEAN_LIB = (cd lib; make fclean)
-
-LIB_PATH = -L./lib -ljpeg -lfreetype -logg -lvorbis -lvorbisenc -lvorbisfile -lFLAC-static -lsfml-audio-s -lsfml-graphics-s -lsfml-window-s -lsfml-system-s -framework OpenGL -framework AppKit -framework IOKit -framework CoreServices -framework Carbon -framework OpenAL
-
-INC = -I./include
-
-SRC	=	sfml_gesture.cpp		\
-		Timer.cpp				\
-		Sfml.class.cpp
+SRC = sfml_gesture.cpp \
+      Timer.cpp \
+      Sfml.class.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-		$(C_LIB)
-		$(CC) -shared -fPIC -o $(NAME) $(OBJ) $(LIB_PATH) $(CFLAGS) $(INC)
+	@echo "Linking $(NAME)..."
+	$(CC) $(SHARED_FLAG) -o $(NAME) $(OBJ) $(LIB_PATH) $(INC)
 
-.%.o: %.cpp
-	$(CC) -o $@ -c $< $(INC) $(CFLAGS)
+%.o: %.cpp
+	@echo "Compiling $<..."
+	$(CC) -o $@ -c $< $(CFLAGS) $(INC)
 
 clean:
-		rm -rf $(OBJ)
-		$(CLEAN_LIB)
+	@echo "Cleaning object files..."
+	$(RM) $(OBJ)
 
 fclean: clean
-		$(FCLEAN_LIB)
-		rm -rf $(NAME)
+	@echo "Cleaning shared lib..."
+	$(RM) $(NAME)
 
 re: fclean all
 
-.PHONY: all clean re fclean
+.PHONY: all clean fclean re

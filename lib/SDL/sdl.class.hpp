@@ -1,23 +1,31 @@
-// ************************************************************************** //
-//                                                                            //
-//                                                        :::      ::::::::   //
-//   sdl.class.hpp                                      :+:      :+:    :+:   //
-//                                                    +:+ +:+         +:+     //
-//   By: mmoumini <marvin@42.fr>                    +#+  +:+       +#+        //
-//                                                +#+#+#+#+#+   +#+           //
-//   Created: 2015/01/15 23:10:50 by mmoumini          #+#    #+#             //
-//   Updated: 2015/06/07 19:45:30 by mmoumini         ###   ########.fr       //
-//                                                                            //
-// ************************************************************************** //
+/******************************************************************************/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sdl.class.hpp                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmoumini <mmoumini@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2015/01/15 23:10:50 by mmoumini          #+#    #+#             */
+/*   Updated: 2025/04/12 11:29:38 by mmoumini         ###   ########.fr       */
+/*                                                                            */
+/******************************************************************************/
 
 #ifndef _SDL_CLASS_
 #define _SDL_CLASS_
 
-#include <dlfcn.h>
+#ifdef _WIN32
+    #include <windows.h>
+#else
+    #include <dlfcn.h>
+#endif
 #include <iostream>
 #include <list>
-//#include "Headers/SDL.h"
-#include "SDL2/SDL.h"
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_video.h>
+#include <SDL3/SDL_surface.h>
+#include <SDL3/SDL_render.h>
+#include <SDL3/SDL_events.h>
+#include <SDL3/SDL_filesystem.h>
 #include "../../includes/nibbler.hpp"
 #include "../../includes/IGui.hpp"
 
@@ -26,9 +34,7 @@
 
 class Sdl_class : public IGui {
 private:
-	std::list<SDL_RWops*>		file;
-	int							lastTime;
-    int							currentTime;
+	std::list<SDL_IOStream*> 	file;
 	SDL_Surface					*back;
 	SDL_Texture					*backTex;
 	SDL_Renderer				*pRenderer;
@@ -44,7 +50,7 @@ public:
 
 	Sdl_class( void );
 	Sdl_class( Sdl_class const &src );
-	~Sdl_class( void );
+	virtual ~Sdl_class( void );
 	Sdl_class	& operator=( Sdl_class const &rhs);
 	int			init( GameEvent & event );
 	bool		check_event( GameEvent & event );
